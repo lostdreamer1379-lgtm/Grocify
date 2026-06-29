@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grocify</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="logo">🛒</span>
+                <h1>Grocify</h1>
+            </div>
+            <div class="nav-user">
+                <div class="budget-indicator">
+                    <span class="budget-text">₹<span id="currentSpent">1850</span> / ₹<span id="budgetLimit">2500</span></span>
+                    <div class="budget-bar">
+                        <div class="budget-progress" id="budgetProgress"></div>
+                    </div>
+                </div>
+                <div class="green-coins-display">
+                    <span class="coins-icon">🌱</span>
+                    <span class="coins-count" id="headerGreenCoins">150</span>
+                </div>
+                <div class="user-profile">
+                    <span class="user-name">Alex</span>
+                    <div class="user-avatar" id="userAvatar">A</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Side Navigation -->
+    <aside class="side-nav" id="sideNav">
+        <div class="nav-toggle" id="navToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="#" data-section="dashboard" class="nav-link active">🏠 Dashboard</a></li>
+            <li><a href="#" data-section="what-can-cook" class="nav-link">👨‍🍳 What Can I Cook</a></li>
+            <li><a href="#" data-section="moodbites" class="nav-link">😋 MoodBites</a></li>
+            <li><a href="#" data-section="pantry" class="nav-link">📦 Pantry</a></li>
+            <li><a href="#" data-section="meal-planner" class="nav-link">🗓️ Meal Planner</a></li>
+            <li><a href="#" data-section="shopping" class="nav-link">🛒 Shopping List</a></li>
+            <li><a href="#" data-section="nutrition" class="nav-link">🔬 Nutrition</a></li>
+            <li><a href="#" data-section="recipes" class="nav-link">📖 Recipes</a></li>
+            <li><a href="#" data-section="profile" class="nav-link">⚙️ Profile</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+        <main class="main-content" id="mainContent">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="section active">
+                <div class="section-header">
+                    <h2>Welcome back, Alex! 👋</h2>
+                    <p>Here's your grocery overview for today</p>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-content">
+                            <h3 id="pantryCount">7</h3>
+                            <p>Pantry Items</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🗓️</div>
+                        <div class="stat-content">
+                            <h3 id="plannedMeals">4</h3>
+                            <p>Planned Meals</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🌱</div>
+                        <div class="stat-content">
+                            <h3 id="greenCoins">150</h3>
+                            <p>GreenCoins</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔥</div>
+                        <div class="stat-content">
+                            <h3 id="streak">7</h3>
+                            <p>Day Streak</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-actions">
+                    <button class="btn btn--primary action-btn" data-section="what-can-cook">
+                        👨‍🍳 What Can I Cook
+                    </button>
+                    <button class="btn btn--secondary action-btn" data-section="pantry">
+                        📦 Check Pantry
+                    </button>
+                    <button class="btn btn--outline action-btn" data-section="moodbites">
+                        😋 MoodBites Quiz
+                    </button>
+                </div>
+
+                <div class="alerts-section">
+                    <h3>⚠️ Pantry Alerts</h3>
+                    <div class="alert-list" id="alertList">
+                        <div class="alert-item critical">
+                            <div class="alert-content">
+                                <strong>🥛 Milk</strong> expires in 1 day
+                            </div>
+                            <button class="btn btn--sm btn--primary">Add to Cart</button>
+                        </div>
+                        <div class="alert-item warning">
+                            <div class="alert-content">
+                                <strong>🍅 Tomatoes</strong> expire in 2 days
+                            </div>
+                            <button class="btn btn--sm btn--secondary">Use in Recipe</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- What Can I Cook Section -->
+            <section id="what-can-cook-section" class="section">
+                <div class="section-header">
+                    <h2>👨‍🍳 What Can I Cook?</h2>
+                    <p>Select ingredients from your pantry to find matching recipes</p>
+                </div>
+                
+                <div class="ingredient-selection">
+                    <div class="selection-controls">
+                        <div class="search-filter">
+                            <input type="text" placeholder="Search ingredients..." class="form-control" id="ingredientSearch">
+                            <select class="form-control" id="categoryFilter">
+                                <option value="all">All Categories</option>
+                                <option value="vegetables">Vegetables</option>
+                                <option value="grains">Grains</option>
+                                <option value="dairy">Dairy</option>
+                                <option value="protein">Protein</option>
+                            </select>
+                        </div>
+                        <div class="selection-info">
+                            <span class="selection-counter" id="selectionCounter">0 ingredients selected</span>
+                            <button class="btn btn--primary" id="findRecipesBtn" disabled>Find Recipes</button>
+                        </div>
+                    </div>
+                    
+                    <div class="ingredients-grid" id="ingredientsGrid">
+                        <!-- Ingredient cards populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="recipe-results hidden" id="recipeResults">
+                    <div class="results-header">
+                        <h3 id="resultsTitle">Recipe Matches</h3>
+                        <p id="resultsSubtitle">Based on your selected ingredients</p>
+                    </div>
+                    <div class="results-grid" id="resultsGrid">
+                        <!-- Recipe results populated by JavaScript -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Enhanced MoodBites Section -->
+            <section id="moodbites-section" class="section">
+                <div class="section-header">
+                    <h2>😋 MoodBites</h2>
+                    <p>Let AI curate the perfect recipe based on your current mood and preferences!</p>
+                </div>
+                
+                <div class="moodbites-container">
+                    <div class="card mood-quiz-card" id="moodQuiz">
+                        <div class="quiz-progress">
+                            <div class="progress-track">
+                                <div class="progress-fill" id="quizProgress"></div>
+                            </div>
+                            <span class="progress-text">Question <span id="currentQuestion">1</span> of 4</span>
+                        </div>
+                        
+                        <div class="question-container" id="questionContainer">
+                            <!-- Questions populated by JavaScript -->
+                        </div>
+                        
+                        <div class="quiz-navigation">
+                            <button class="btn btn--secondary mood-nav-btn" id="prevQuestion" disabled>← Previous</button>
+                            <button class="btn btn--primary mood-nav-btn" id="nextQuestion">Next →</button>
+                        </div>
+                    </div>
+
+                    <div class="card mood-results-card hidden" id="moodResults">
+                        <div class="results-header">
+                            <h3>✨ Perfect Matches for Your Mood!</h3>
+                            <p>Based on your responses, here are our top recommendations</p>
+                        </div>
+                        <div class="recipe-suggestions" id="recipeSuggestions">
+                            <!-- Recipe suggestions populated by JavaScript -->
+                        </div>
+                        <button class="btn btn--secondary retake-btn" id="retakeQuiz">🔄 Take Quiz Again</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pantry Section -->
+            <section id="pantry-section" class="section">
+                <div class="section-header">
+                    <h2>📦 Pantry Manager</h2>
+                    <p>Keep track of your ingredients and expiry dates</p>
+                </div>
+                
+                <div class="pantry-controls">
+                    <div class="search-filter">
+                        <input type="text" placeholder="Search items..." class="form-control" id="pantrySearch">
+                        <select class="form-control" id="pantryFilter">
+                            <option value="all">All Items</option>
+                            <option value="critical">Critical</option>
+                            <option value="warning">Warning</option>
+                            <option value="good">Good</option>
+                        </select>
+                    </div>
+                    <button class="btn btn--primary" id="addPantryItem">+ Add Item</button>
+                </div>
+                
+                <div class="pantry-grid" id="pantryGrid">
+                    <!-- Pantry items populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Enhanced Meal Planner Section -->
+            <section id="meal-planner-section" class="section">
+                <div class="section-header">
+                    <h2>🗓️ Meal Planner</h2>
+                    <p>Plan your weekly meals with custom columns and expandable ingredient lists</p>
+                </div>
+                
+                <div class="meal-planner-controls">
+                    <button class="btn btn--secondary" id="addCustomColumn">+ Add Custom Meal Type</button>
+                    <button class="btn btn--primary" id="generateShoppingList">📋 Generate Shopping List</button>
+                    <button class="btn btn--outline" id="clearMealPlan">🗑️ Clear Week</button>
+                </div>
+                
+                <div class="meal-planner-container">
+                    <div class="meal-planner-grid" id="mealPlannerGrid">
+                        <!-- Meal planner populated by JavaScript -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Shopping List Section -->
+            <section id="shopping-section" class="section">
+                <div class="section-header">
+                    <h2>🛒 Smart Shopping List</h2>
+                    <p>Your organized shopping list with budget tracking</p>
+                </div>
+                
+                <div class="shopping-controls">
+                    <div class="add-item-form">
+                        <input type="text" placeholder="Add new item..." class="form-control" id="newItemInput">
+                        <button class="btn btn--primary" id="addShoppingItem">Add Item</button>
+                    </div>
+                </div>
+                
+                <div class="shopping-categories" id="shoppingCategories">
+                    <!-- Shopping categories populated by JavaScript -->
+                </div>
+                
+                <div class="shopping-summary card">
+                    <div class="card__body">
+                        <div class="total-breakdown">
+                            <div class="total-item">
+                                <span>Total Items:</span>
+                                <span id="totalItems">0</span>
+                            </div>
+                            <div class="total-item">
+                                <span>Completed:</span>
+                                <span id="completedItems">0</span>
+                            </div>
+                            <div class="total-item total-final">
+                                <span>Remaining:</span>
+                                <span id="remainingItems">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Enhanced Nutrition Section -->
+            <section id="nutrition-section" class="section">
+                <div class="section-header">
+                    <h2>🔬 Nutrition Tracker</h2>
+                    <p>Track your daily nutrition and monitor your health goals</p>
+                </div>
+                
+                <div class="nutrition-tabs">
+                    <button class="nutrition-tab active" data-tab="daily">Daily Tracking</button>
+                    <button class="nutrition-tab" data-tab="search">Food Search</button>
+                </div>
+                
+                <div class="nutrition-tab-content">
+                    <!-- Daily Tracking Tab -->
+                    <div class="nutrition-tab-panel active" id="dailyTrackingPanel">
+                        <div class="nutrition-layout">
+                            <div class="nutrition-overview">
+                                <div class="card daily-overview-card">
+                                    <div class="card__header">
+                                        <h3>Today's Overview</h3>
+                                        <span class="date-display">Thursday, Oct 9</span>
+                                    </div>
+                                    <div class="card__body">
+                                        <div class="calorie-section">
+                                            <div class="calorie-chart-container" style="position: relative; height: 240px;">
+                                                <canvas id="calorieChart"></canvas>
+                                            </div>
+                                            <div class="calorie-stats">
+                                                <div class="calorie-consumed">
+                                                    <span class="calorie-number" id="consumedCalories">1,850</span>
+                                                    <span class="calorie-label">Consumed</span>
+                                                </div>
+                                                <div class="calorie-remaining">
+                                                    <span class="calorie-number" id="remainingCalories">150</span>
+                                                    <span class="calorie-label">Remaining</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="macro-section">
+                                            <h4>Macronutrients</h4>
+                                            <div class="macro-breakdown">
+                                                <div class="macro-item">
+                                                    <div class="macro-header">
+                                                        <span class="macro-label">Protein</span>
+                                                        <span class="macro-values">85g / 125g</span>
+                                                    </div>
+                                                    <div class="macro-bar">
+                                                        <div class="macro-progress protein" style="width: 68%"></div>
+                                                    </div>
+                                                    <span class="macro-percentage">68%</span>
+                                                </div>
+                                                <div class="macro-item">
+                                                    <div class="macro-header">
+                                                        <span class="macro-label">Carbs</span>
+                                                        <span class="macro-values">230g / 300g</span>
+                                                    </div>
+                                                    <div class="macro-bar">
+                                                        <div class="macro-progress carbs" style="width: 77%"></div>
+                                                    </div>
+                                                    <span class="macro-percentage">77%</span>
+                                                </div>
+                                                <div class="macro-item">
+                                                    <div class="macro-header">
+                                                        <span class="macro-label">Fat</span>
+                                                        <span class="macro-values">65g / 80g</span>
+                                                    </div>
+                                                    <div class="macro-bar">
+                                                        <div class="macro-progress fat" style="width: 81%"></div>
+                                                    </div>
+                                                    <span class="macro-percentage">81%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card food-log-card">
+                                    <div class="card__header">
+                                        <h3>Today's Food Log</h3>
+                                    </div>
+                                    <div class="card__body">
+                                        <div class="food-log-list" id="foodLogList">
+                                            <div class="food-log-item">
+                                                <div class="food-info">
+                                                    <span class="food-name">Oatmeal with Banana</span>
+                                                    <span class="food-time">8:30 AM</span>
+                                                </div>
+                                                <div class="food-nutrition">
+                                                    <span class="food-calories">320 cal</span>
+                                                    <button class="btn btn--sm remove-food-btn">Remove</button>
+                                                </div>
+                                            </div>
+                                            <div class="food-log-item">
+                                                <div class="food-info">
+                                                    <span class="food-name">Grilled Chicken Salad</span>
+                                                    <span class="food-time">1:15 PM</span>
+                                                </div>
+                                                <div class="food-nutrition">
+                                                    <span class="food-calories">450 cal</span>
+                                                    <button class="btn btn--sm remove-food-btn">Remove</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="nutrition-charts">
+                                <div class="card weekly-trend-card">
+                                    <div class="card__header">
+                                        <h3>Weekly Trend</h3>
+                                    </div>
+                                    <div class="card__body">
+                                        <div class="weekly-chart-container" style="position: relative; height: 200px;">
+                                            <canvas id="weeklyChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Food Search Tab -->
+                    <div class="nutrition-tab-panel" id="foodSearchPanel">
+                        <div class="food-search-container">
+                            <div class="card food-search-card">
+                                <div class="card__header">
+                                    <h3>Search Food Database</h3>
+                                    <p>Find nutrition information for any food item</p>
+                                </div>
+                                <div class="card__body">
+                                    <div class="search-input-group">
+                                        <input type="text" class="form-control" id="foodSearchInput" 
+                                               placeholder="Search food (e.g., Banana, McDonald's Big Mac, Dal)">
+                                        <button class="btn btn--primary" id="searchFoodBtn">Search</button>
+                                    </div>
+                                    
+                                    <div class="search-results-container" id="searchResultsContainer">
+                                        <div class="search-loading hidden" id="searchLoading">
+                                            <div class="loading-spinner"></div>
+                                            <span>Searching...</span>
+                                        </div>
+                                        
+                                        <div class="search-results" id="searchResults">
+                                            <!-- Search results will be populated here -->
+                                        </div>
+                                        
+                                        <div class="no-results hidden" id="noResults">
+                                            <div class="no-results-icon">🔍</div>
+                                            <h4>No results found</h4>
+                                            <p>Try searching for a different food item or check your spelling.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recipes Section -->
+            <section id="recipes-section" class="section">
+                <div class="section-header">
+                    <h2>📖 Recipe Database</h2>
+                    <p>Discover new recipes and cooking ideas</p>
+                </div>
+                
+                <div class="recipe-filters">
+                    <input type="text" placeholder="Search recipes..." class="form-control" id="recipeSearch">
+                    <select class="form-control" id="cuisineFilter">
+                        <option value="all">All Cuisines</option>
+                        <option value="Indian">Indian</option>
+                        <option value="Asian">Asian</option>
+                        <option value="American">American</option>
+                        <option value="Healthy">Healthy</option>
+                    </select>
+                </div>
+                
+                <div class="recipe-grid" id="recipeGrid">
+                    <!-- Recipes populated by JavaScript -->
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile-section" class="section">
+                <div class="section-header">
+                    <h2>⚙️ Profile Settings</h2>
+                    <p>Manage your account and preferences</p>
+                </div>
+
+                <div class="profile-content">
+                    <div class="card profile-info-card">
+                        <div class="card__header">
+                            <h3>Personal Information</h3>
+                        </div>
+                        <div class="card__body">
+                            <div class="profile-header">
+                                <div class="profile-image" id="profileImage">AJ</div>
+                                <div class="profile-details">
+                                    <div class="profile-form">
+                                        <div class="form-group">
+                                            <label class="form-label">Full Name</label>
+                                            <input type="text" class="form-control" id="editableName" value="Alex Johnson">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="editableEmail" value="alex.johnson@email.com">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Phone</label>
+                                            <input type="tel" class="form-control" id="editablePhone" value="+1 (555) 123-4567">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="profile-actions">
+                                <button class="btn btn--primary" id="saveProfileBtn">Save Changes</button>
+                                <button class="btn btn--secondary" id="cancelProfileBtn">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card budget-settings-card">
+                        <div class="card__header">
+                            <h3>Budget Settings</h3>
+                        </div>
+                        <div class="card__body">
+                            <div class="budget-control">
+                                <label class="form-label">Monthly Budget Limit</label>
+                                <div class="slider-container">
+                                    <input type="range" class="budget-slider" id="budgetSlider" 
+                                           min="1000" max="10000" step="100" value="2500">
+                                    <div class="slider-value">₹<span id="sliderValue">2,500</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card theme-settings-card">
+                        <div class="card__header">
+                            <h3>Theme Preferences</h3>
+                        </div>
+                        <div class="card__body">
+                            <div class="theme-toggle-container">
+                                <span class="theme-label">Light</span>
+                                <label class="theme-switch">
+                                    <input type="checkbox" id="themeToggle">
+                                    <span class="theme-slider">
+                                        <span class="theme-icon sun">☀️</span>
+                                        <span class="theme-icon moon">🌙</span>
+                                    </span>
+                                </label>
+                                <span class="theme-label">Dark</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- AI Chatbot Assistant -->
+    <div class="ai-chatbot-container">
+        <button class="chatbot-float-btn" id="chatbotFloatBtn">
+            <div class="chatbot-icon">🤖</div>
+            <div class="chatbot-pulse"></div>
+        </button>
+
+        <div class="chatbot-popup hidden" id="chatbotPopup">
+            <div class="chatbot-header">
+                <div class="chatbot-header-info">
+                    <div class="chatbot-avatar">🤖</div>
+                    <div class="chatbot-title">
+                        <h4>SmartCart AI</h4>
+                        <span class="chatbot-status">Online</span>
+                    </div>
+                </div>
+                <button class="chatbot-close-btn" id="chatbotCloseBtn">&times;</button>
+            </div>
+
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="chatbot-message bot-message">
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content">
+                        <p>Hi! I'm your SmartCart AI Assistant. I can help you:</p>
+                        <ul>
+                            <li>📋 Add items to your shopping list</li>
+                            <li>🗓️ Plan your meals</li>
+                            <li>📖 Find and recommend recipes</li>
+                            <li>📦 Check pantry status</li>
+                        </ul>
+                        <p>Try saying: "Add milk to shopping list" or "What's for dinner?"</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chatbot-input-container">
+                <div class="input-actions">
+                    <button class="voice-btn" id="voiceBtn" title="Voice Input">🎤</button>
+                </div>
+                <input type="text" class="chatbot-input" id="chatbotInput" 
+                       placeholder="Type your message or use voice..." maxlength="500">
+                <button class="send-btn" id="sendBtn" title="Send Message">➤</button>
+            </div>
+
+            <div class="voice-recording-indicator hidden" id="voiceRecording">
+                <div class="recording-wave">
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                    <div class="wave-bar"></div>
+                </div>
+                <span>Listening...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation (Mobile) -->
+    <nav class="bottom-nav">
+        <a href="#" data-section="dashboard" class="bottom-nav-link active">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="#" data-section="what-can-cook" class="bottom-nav-link">
+            <span class="nav-icon">👨‍🍳</span>
+            <span class="nav-label">Cook</span>
+        </a>
+        <a href="#" data-section="pantry" class="bottom-nav-link">
+            <span class="nav-icon">📦</span>
+            <span class="nav-label">Pantry</span>
+        </a>
+        <a href="#" data-section="shopping" class="bottom-nav-link">
+            <span class="nav-icon">🛒</span>
+            <span class="nav-label">Shopping</span>
+        </a>
+    </nav>
+
+    <!-- Modals -->
+    <div class="modal hidden" id="recipeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalRecipeName">Recipe Name</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="recipe-details">
+                    <div class="recipe-meta">
+                        <span class="recipe-time">⏱️ <span id="modalRecipeTime">25 mins</span></span>
+                        <span class="recipe-difficulty">📊 <span id="modalRecipeDifficulty">Easy</span></span>
+                    </div>
+                    <div class="recipe-content">
+                        <div class="ingredients-section">
+                            <h4>Ingredients</h4>
+                            <ul id="modalIngredients"></ul>
+                        </div>
+                        <div class="instructions-section">
+                            <h4>Instructions</h4>
+                            <ol id="modalInstructions"></ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn--secondary" id="addToMealPlan">Add to Meal Plan</button>
+                <button class="btn btn--primary" id="addToShopping">Add to Shopping List</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Add Meal Modal with Recipe Dropdown -->
+    <div class="modal hidden" id="addMealModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Meal</h3>
+                <button class="modal-close" id="closeMealModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Select from Recipes (Optional)</label>
+                    <select class="form-control" id="recipeDropdown">
+                        <option value="">Choose a recipe or enter manually below</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Food/Meal Name</label>
+                    <input type="text" class="form-control" id="mealNameInput" placeholder="Enter meal name...">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Number of Servings</label>
+                    <div class="serving-controls">
+                        <button class="btn btn--secondary serving-btn" id="decreaseServing">-</button>
+                        <input type="number" class="form-control serving-input" id="servingInput" value="1" min="1" max="10">
+                        <button class="btn btn--secondary serving-btn" id="increaseServing">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn--secondary" id="cancelMealBtn">Cancel</button>
+                <button class="btn btn--primary" id="addMealBtn">Add to Meal</button>
+            </div>
+        </div>
+    </div>
+    <!-- Add Pantry Item Modal -->
+<div class="modal hidden" id="addPantryItemModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add Pantry Item</h3>
+        <button class="modal-close" id="closeAddPantryModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label" for="pantryItemName">Item Name</label>
+          <input type="text" class="form-control" id="pantryItemName" placeholder="e.g., Tomatoes">
+        </div>
+  
+        <div class="form-group">
+          <label class="form-label">Quantity and Unit</label>
+          <div style="display:flex; gap:12px;">
+            <input type="number" class="form-control" id="pantryItemQty" min="0" step="1" placeholder="e.g., 2">
+            <select class="form-control" id="pantryItemUnit">
+              <option value="pieces">pieces</option>
+              <option value="g">g</option>
+              <option value="kg">kg</option>
+              <option value="ml">ml</option>
+              <option value="L">L</option>
+              <option value="loaf">loaf</option>
+              <option value="pack">pack</option>
+            </select>
+          </div>
+        </div>
+  
+        <div class="form-group">
+          <label class="form-label" for="pantryItemExpiry">Expiry (optional)</label>
+          <input type="date" class="form-control" id="pantryItemExpiry" placeholder="YYYY-MM-DD">
+          <small class="form-helper-text">Leave empty if not applicable</small>
+        </div>
+  
+        <div class="form-group">
+          <label class="form-label" for="pantryItemImage">Image (optional)</label>
+          <input type="file" class="form-control" id="pantryItemImage" accept="image/*">
+          <div id="pantryImagePreview" style="margin-top:12px; display:none;">
+            <img id="pantryImagePreviewImg" alt="Preview" style="width:100%; max-height:180px; object-fit:cover; border-radius:8px;">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Or use camera</label>
+        <div class="camera-controls">
+          <button type="button" class="btn btn--secondary" id="openCameraBtn">Open Camera</button>
+          <button type="button" class="btn btn--secondary" id="closeCameraBtn" style="display:none;">Close Camera</button>
+        </div>
+        <div id="cameraArea" class="camera-area" style="display:none;">
+          <video id="cameraStream" autoplay playsinline style="width:100%; border-radius:8px;"></video>
+          <div class="camera-actions" style="margin-top:10px; display:flex; gap:12px;">
+            <button type="button" class="btn btn--primary" id="capturePhotoBtn">Capture</button>
+            <span class="camera-hint">Grant camera permission, align item, then tap Capture</span>
+          </div>
+          <!-- Hidden canvas for capture -->
+          <canvas id="cameraCanvas" style="display:none;"></canvas>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn btn--secondary" id="cancelAddPantry">Cancel</button>
+        <button class="btn btn--primary" id="confirmAddPantry">Add Item</button>
+      </div>
+    </div>
+  </div>
+  <!-- Add Shopping Item Modal -->
+<div class="modal hidden" id="addShoppingItemModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add Shopping Item</h3>
+        <button class="modal-close" id="closeAddShoppingModal">&times;</button>
+      </div>
+  
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label" for="shopItemName">Item Name</label>
+          <input type="text" class="form-control" id="shopItemName" placeholder="e.g., Tomatoes">
+        </div>
+  
+        <div class="form-group">
+          <label class="form-label">Quantity and Unit</label>
+          <div style="display:flex; gap:12px;">
+            <input type="number" class="form-control" id="shopItemQty" min="1" step="1" placeholder="e.g., 2">
+            <select class="form-control" id="shopItemUnit">
+              <option value="pieces">pieces</option>
+              <option value="g">g</option>
+              <option value="kg">kg</option>
+              <option value="ml">ml</option>
+              <option value="L">L</option>
+              <option value="pack">pack</option>
+            </select>
+          </div>
+        </div>
+  
+        <div class="form-group">
+          <label class="form-label" for="shopItemPrice">Price (optional)</label>
+          <input type="number" class="form-control" id="shopItemPrice" min="0" step="0.01" placeholder="e.g., 49.00">
+          <small class="form-helper-text">Price can be edited later</small>
+        </div>
+      </div>
+  
+      <div class="modal-footer">
+        <button class="btn btn--secondary" id="cancelAddShopping">Cancel</button>
+        <button class="btn btn--primary" id="confirmAddShopping">Add Item</button>
+      </div>
+    </div>
+  </div>
+  
+  
+
+    <script src="app.js"></script>
+</body>
+</html>
