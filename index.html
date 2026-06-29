@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grocify</title>
+    <title>SmartCart+ - AI-Powered Grocery Assistant</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -13,7 +13,7 @@
         <div class="nav-container">
             <div class="nav-brand">
                 <span class="logo">🛒</span>
-                <h1>Grocify</h1>
+                <h1>SmartCart+</h1>
             </div>
             <div class="nav-user">
                 <div class="budget-indicator">
@@ -22,10 +22,7 @@
                         <div class="budget-progress" id="budgetProgress"></div>
                     </div>
                 </div>
-                <div class="green-coins-display">
-                    <span class="coins-icon">🌱</span>
-                    <span class="coins-count" id="headerGreenCoins">150</span>
-                </div>
+            
                 <div class="user-profile">
                     <span class="user-name">Alex</span>
                     <div class="user-avatar" id="userAvatar">A</div>
@@ -77,13 +74,6 @@
                         <div class="stat-content">
                             <h3 id="plannedMeals">4</h3>
                             <p>Planned Meals</p>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">🌱</div>
-                        <div class="stat-content">
-                            <h3 id="greenCoins">150</h3>
-                            <p>GreenCoins</p>
                         </div>
                     </div>
                     <div class="stat-card">
@@ -260,7 +250,6 @@
                 
                 <div class="shopping-controls">
                     <div class="add-item-form">
-                        <input type="text" placeholder="Add new item..." class="form-control" id="newItemInput">
                         <button class="btn btn--primary" id="addShoppingItem">Add Item</button>
                     </div>
                 </div>
@@ -273,16 +262,16 @@
                     <div class="card__body">
                         <div class="total-breakdown">
                             <div class="total-item">
-                                <span>Total Items:</span>
+                                <span>Total Items</span>
                                 <span id="totalItems">0</span>
-                            </div>
-                            <div class="total-item">
-                                <span>Completed:</span>
-                                <span id="completedItems">0</span>
-                            </div>
-                            <div class="total-item total-final">
-                                <span>Remaining:</span>
-                                <span id="remainingItems">0</span>
+                              </div>
+                              <div class="total-item">
+                                <span>Total Price</span>
+                                <span id="totalPrice">0</span>
+                              </div>
+                              <div class="total-item total-final">
+                                <span>Budget Left</span>
+                                <span id="budgetLeft">0</span>
                             </div>
                         </div>
                     </div>
@@ -460,12 +449,57 @@
                 <div class="recipe-filters">
                     <input type="text" placeholder="Search recipes..." class="form-control" id="recipeSearch">
                     <select class="form-control" id="cuisineFilter">
-                        <option value="all">All Cuisines</option>
-                        <option value="Indian">Indian</option>
+                        <option value="all">All</option>
+                        <option value="Indo-Chinese">Indo-Chinese</option>
+                        <option value="North Indian">North Indian</option>
+                        <option value="South Indian">South Indian</option>
+                        <option value="Bengali">Bengali</option>
                         <option value="Asian">Asian</option>
-                        <option value="American">American</option>
-                        <option value="Healthy">Healthy</option>
+                        <option value="Continental">Continental</option>
+                        <option value="Western">Western</option>
                     </select>
+                    <select id="vegFilter">
+                        <option value="all">All</option>
+                        <option value="veg">Vegetarian</option>
+                        <option value="nonVeg">Non-Vegetarian</option>
+                      </select>
+                      
+                      <select id="difficultyFilter">
+                        <option value="all">All</option>
+                        <option value="Easy">Easy</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Hard">Hard</option>
+                      </select>
+                      
+                      <select id="spicinessFilter">
+                        <option value="all">All</option>
+                        <option value="Mild">Mild</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Hot">Hot</option>
+                      </select>
+                      
+                      <select id="healthFilter">
+                        <option value="all">All</option>
+                        <option value="Diabetic">Diabetic</option>
+                        <option value="Gluten-Free">Gluten-Free</option>
+                        <option value="Low-Sodium">Low-Sodium</option>
+                        <option value="Low-Carb">Low-Carb</option>
+                        <option value="High-Protein">High-Protein</option>   
+                        <option value="Heart-Healthy">Heart-Healthy</option>
+                        <option value="Low-Fat">Low-Fat</option>
+                        <option value="Dairy-Free">Dairy-Free</option>
+                        <option value="Nut-Free">Nut-Free</option>
+                        <option value="Soy-Free">Soy-Free</option>
+                        <option value="No Added Sugar">No Added Sugar</option>
+                      </select>
+                      
+                      <select id="timeFilter">
+                        <option value="all">All</option>
+                        <option value="15">Up to 15 mins</option>
+                        <option value="30">Up to 30 mins</option>
+                        <option value="60">Up to 60 mins</option>
+                      </select>
+                      
                 </div>
                 
                 <div class="recipe-grid" id="recipeGrid">
@@ -613,17 +647,21 @@
             <span class="nav-icon">🏠</span>
             <span class="nav-label">Home</span>
         </a>
-        <a href="#" data-section="what-can-cook" class="bottom-nav-link">
-            <span class="nav-icon">👨‍🍳</span>
-            <span class="nav-label">Cook</span>
-        </a>
-        <a href="#" data-section="pantry" class="bottom-nav-link">
-            <span class="nav-icon">📦</span>
-            <span class="nav-label">Pantry</span>
+        <a href="#" data-section="recipes" class="bottom-nav-link">
+            <span class="nav-icon">🍕</span>
+            <span class="nav-label">Recipes</span>
         </a>
         <a href="#" data-section="shopping" class="bottom-nav-link">
             <span class="nav-icon">🛒</span>
             <span class="nav-label">Shopping</span>
+        </a>
+        <a href="#" data-section="nutrition" class="bottom-nav-link">
+            <span class="nav-icon">🍎</span>
+            <span class="nav-label">Nutrition</span>
+        </a>
+        <a href="#" data-section="profile" class="bottom-nav-link">
+            <span class="nav-icon">⚙️</span>
+            <span class="nav-label">Profile</span>
         </a>
     </nav>
 
@@ -765,17 +803,15 @@
         <h3>Add Shopping Item</h3>
         <button class="modal-close" id="closeAddShoppingModal">&times;</button>
       </div>
-  
       <div class="modal-body">
         <div class="form-group">
           <label class="form-label" for="shopItemName">Item Name</label>
-          <input type="text" class="form-control" id="shopItemName" placeholder="e.g., Tomatoes">
+          <input type="text" class="form-control" id="shopItemName" placeholder="e.g., Tomatoes" />
         </div>
-  
         <div class="form-group">
           <label class="form-label">Quantity and Unit</label>
-          <div style="display:flex; gap:12px;">
-            <input type="number" class="form-control" id="shopItemQty" min="1" step="1" placeholder="e.g., 2">
+          <div style="display: flex; gap: 12px;">
+            <input type="number" class="form-control" id="shopItemQty" min="1" step="1" placeholder="e.g., 2" />
             <select class="form-control" id="shopItemUnit">
               <option value="pieces">pieces</option>
               <option value="g">g</option>
@@ -786,20 +822,19 @@
             </select>
           </div>
         </div>
-  
         <div class="form-group">
           <label class="form-label" for="shopItemPrice">Price (optional)</label>
-          <input type="number" class="form-control" id="shopItemPrice" min="0" step="0.01" placeholder="e.g., 49.00">
+          <input type="number" class="form-control" id="shopItemPrice" min="0" step="0.01" placeholder="e.g., 49.00" />
           <small class="form-helper-text">Price can be edited later</small>
         </div>
       </div>
-  
       <div class="modal-footer">
-        <button class="btn btn--secondary" id="cancelAddShopping">Cancel</button>
+        <button class="btn btn--secondary" id="cancelAddShoppingCancel">Cancel</button>
         <button class="btn btn--primary" id="confirmAddShopping">Add Item</button>
       </div>
     </div>
   </div>
+  
   
   
 
